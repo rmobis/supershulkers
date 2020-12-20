@@ -1,9 +1,3 @@
-# Fabric Example Mod
+# Supershulkers
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This is just a mod to add a little flourish to @gnembom's shulkerboxes [script](https://github.com/gnembon/scarpet/blob/master/programs/survival/shulkerboxes.sc), which is itself based on Xisuma's [video](https://www.youtube.com/watch?v=FMu8T8KriQY). A lot of the code is copy-pasted from arxenix/better-shulkers, which is thankfully licensed with a permissive license.
