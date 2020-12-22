@@ -1,19 +1,19 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "supershulkers",
 	"version": "${version}",
 
-	"name": "Example Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Super Shulkers",
+	"description": "Gives shulker boxes superpowers.",
 	"authors": [
-		"Me!"
+		"rmobis"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/rmobis/supershulkers",
+		"sources": "https://github.com/rmobis/supershulkers"
 	},
 
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/modid/icon.png",
 
 	"environment": "*",
@@ -32,6 +32,5 @@
 		"minecraft": "1.16.x"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }
