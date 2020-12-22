@@ -1,4 +1,4 @@
-package net.fabricmc.example;
+package is.rmob.supershulkers;
 
 import net.fabricmc.api.ModInitializer;
 
