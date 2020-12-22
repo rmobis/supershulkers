@@ -1,14 +1,11 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "is.rmob.supershulkers.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
-  "client": [
-    "ExampleMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "is.rmob.supershulkers.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [],
+	"client": [],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }
