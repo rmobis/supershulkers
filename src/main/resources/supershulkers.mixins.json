@@ -4,7 +4,9 @@
 	"package": "is.rmob.supershulkers.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [],
-	"client": [],
+	"client": [
+		"BlockItemMixin"
+	],
 	"injectors": {
 		"defaultRequire": 1
 	}

@@ -19,11 +19,14 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"is.rmob.supershulkers.ExampleMod"
+			"is.rmob.supershulkers.SuperShulkers"
+		],
+		"mm:early_risers": [
+			"is.rmob.supershulkers.asm.EarlyRiser"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json"
+		"supershulkers.mixins.json"
 	],
 
 	"depends": {
