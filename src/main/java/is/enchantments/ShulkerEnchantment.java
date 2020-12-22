@@ -7,6 +7,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 
 public class ShulkerEnchantment extends Enchantment {
+	// This retrives the custom enum entry we created in our early riser
 	private static final EnchantmentTarget SHULKER_TARGET = ClassTinkerers.getEnum(EnchantmentTarget.class, "SHULKER_BOX");
 
 	public ShulkerEnchantment() {
@@ -20,7 +21,7 @@ public class ShulkerEnchantment extends Enchantment {
 
 	@Override
 	public int getMaxPower(int level) {
-		return 999;
+		return Integer.MAX_VALUE;
 	}
 
 	@Override

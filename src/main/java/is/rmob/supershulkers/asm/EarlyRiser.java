@@ -1,16 +1,23 @@
 package is.rmob.supershulkers.asm;
 
 import com.chocohead.mm.api.ClassTinkerers;
+import com.chocohead.mm.api.EnumAdder;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 
 public class EarlyRiser implements Runnable {
+	
+	// We add a new entry to the EnchantmentTarget enum (through the intermediary name), using our
+	// ShulkerBoxEnchantmentTarget class, which is where the actual functionality is implemented
 	@Override
 	public void run() {
-		System.out.println("EARLY RISING");
+		MappingResolver mapResolver = FabricLoader.getInstance().getMappingResolver();
 
+		final String enchTargetClass = mapResolver.mapClassName("intermediary", "net.minecraft.class_1886");
 
-		final String enchantmentTargetClass = FabricLoader.getInstance().getMappingResolver().mapClassName("intermediary", "net.minecraft.class_1886");
-		ClassTinkerers.enumBuilder(enchantmentTargetClass, new Class[0]).addEnumSubclass("SHULKER_BOX", "is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget").build();
+		EnumAdder enchTargetAdder = ClassTinkerers.enumBuilder(enchTargetClass, new Class[0]);
+		enchTargetAdder.addEnumSubclass("SHULKER_BOX", "is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget");
+		enchTargetAdder.build();
 	}
 }

@@ -30,6 +30,7 @@ public class ShulkerBoxEnchantmentTarget extends EnchantmentTargetMixin {
 
 	@Override
 	public boolean isAcceptableItem(Item item) {
+		// TODO: move to some kind of utilities class
 		return SHULKER_BOXES.contains(item);
 	}
 }
