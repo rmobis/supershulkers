@@ -5,7 +5,10 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [],
 	"client": [
-		"BlockItemMixin"
+		"BlockItemMixin",
+		"ItemStackMixin",
+		"ShulkerBoxBlockEntityMixin",
+		"ShulkerBoxBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

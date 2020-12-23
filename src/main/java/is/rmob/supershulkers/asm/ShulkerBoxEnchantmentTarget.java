@@ -8,6 +8,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 public class ShulkerBoxEnchantmentTarget extends EnchantmentTargetMixin {
+	// TODO: move to some kind of utilities class (?)
+	public static boolean isShulkerBox(Item item) {
+		return SHULKER_BOXES.contains(item);
+	}
+
 	public static final List<Item> SHULKER_BOXES = Arrays.asList(
 		Items.BLACK_SHULKER_BOX,
 		Items.BLUE_SHULKER_BOX,
@@ -30,7 +35,6 @@ public class ShulkerBoxEnchantmentTarget extends EnchantmentTargetMixin {
 
 	@Override
 	public boolean isAcceptableItem(Item item) {
-		// TODO: move to some kind of utilities class
-		return SHULKER_BOXES.contains(item);
+		return isShulkerBox(item);
 	}
 }
