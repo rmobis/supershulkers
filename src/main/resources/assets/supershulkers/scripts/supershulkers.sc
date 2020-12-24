@@ -282,9 +282,8 @@ __swap_stack(player, slot, previous_item, item, count, tag) ->
 			// and have non-empty inventory
 			if ( shulker_item ~ 'shulker_box$'
 					&& scount == 1
-					&& (nametag = shulker_tag:'display.Name') != null
-					&& (shulker_type = lower(parse_nbt(nametag):'text') ~ '(restock|swap)\\s+(same|keep|next|random|first)')
-					&& ([action_type, idx_choice] = shulker_type; (action_type!='restock' || count == 0 ) )
+					&& shulker_tag ~ 'supershulkers:restock'
+					&& ([action_type, idx_choice] = ['restock', 'same']; (action_type!='restock' || count == 0 ) )
 					&& (shulker_stacks = shulker_tag:'BlockEntityTag.Items[]') != null ,
 				if (type(shulker_stacks)=='nbt', shulker_stacks = [shulker_stacks]);
 				sb_item_count = length(shulker_stacks);
