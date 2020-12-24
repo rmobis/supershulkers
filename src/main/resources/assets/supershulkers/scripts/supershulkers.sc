@@ -134,8 +134,7 @@ __add_item_to_vacuum_sboxes(player, search_item, refill_count, search_tag, do_ch
 				// and have a custom name, which contains 'vacuum' and have non-empty inventory
 				if ( shulker_item ~ 'shulker_box$'
 						&& scount == 1
-						&& (nametag = shulker_tag:'display.Name') != null
-						&& lower(parse_nbt(nametag):'text') ~ 'vacuum'
+						&& shulker_tag ~ 'vacuum'
 						&& (items = shulker_tag:'BlockEntityTag.Items[]') != null ,
 					// well, not sure why nbt query for singleton lists return that element, not a list
 					// but that's a Mojang thing
