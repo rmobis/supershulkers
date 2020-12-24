@@ -123,8 +123,8 @@ __add_item_to_vacuum_sboxes(player, search_item, refill_count, search_tag, do_ch
 (
 	item_limit = stack_limit(search_item);
 	item_fqdn = __to_fqdn(search_item);
-	//searching first in regular inventory, and then the enderchest
-	for( [player, 'enderchest_'+player],
+	//searching in regular inventory
+	for( [player],
 		inventory = _;
 		// not using inventory_find  here since shulkerboxes have all different ids based on color
 		loop(inventory_size(inventory),
@@ -254,16 +254,13 @@ __check_slot_change(player, slot, previous_item_tuple) ->
 __get_inventory_indices_for_slot(slot, player) ->
 (
 	start_offset = if (slot==40, 8, slot < 9, slot, 0);
-	echest = 'enderchest_'+player;
 	indices = [
-			[player, 27+start_offset], [player, 18+start_offset], [player, 9+start_offset],
-			[echest, 18+start_offset], [echest, 9 +start_offset], [echest, 0+start_offset]
+			[player, 27+start_offset], [player, 18+start_offset], [player, 9+start_offset]
 	];
 	for (range(start_offset+1, start_offset+9),
 		offset = _ % 9;
 		put(indices, null, [ [player, offset],
-			[player, 27+offset], [player, 18+offset], [player, 9+offset],
-			[echest, 18+offset], [echest, 9 +offset], [echest, 0+offset],
+			[player, 27+offset], [player, 18+offset], [player, 9+offset]
 		], 'extend');
 	);
 	indices
