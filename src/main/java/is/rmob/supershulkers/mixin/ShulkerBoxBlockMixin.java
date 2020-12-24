@@ -22,7 +22,6 @@ import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -51,9 +50,15 @@ abstract class ShulkerBoxBlockMixin extends Block {
 	private void rebuildStackEnchantments(ItemStack stack, ShulkerBoxBlockEntity sbEntity) {
 		Map<Enchantment, Integer> enchantmentMap = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
 
-		EnchantmentHelper.set(enchantmentMap, stack);
+		// we couldn't use EnchantmentHelper.set because it skips the usual addEnchantment method,
+		// which is what we have hooked for additional persistence
+		for (Map.Entry<Enchantment, Integer> ench : enchantmentMap.entrySet()) {
+			Enchantment enchRef = ench.getKey();
+			int enchLvl = ench.getValue();
 
-		LOGGER.info("Rebuilt enchantments {} onto {}", enchantmentMap, stack);
+			stack.addEnchantment(enchRef, enchLvl);
+			LOGGER.info("Rebuilt enchantment {} (lvl {}) onto {}", enchRef, enchLvl, stack);
+		}
 	}
 
 	@Inject(
