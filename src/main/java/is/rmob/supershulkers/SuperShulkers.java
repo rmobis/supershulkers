@@ -3,8 +3,7 @@ package is.rmob.supershulkers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import carpet.script.CarpetScriptServer;
-import carpet.script.bundled.BundledModule;
+import carpet.CarpetServer;
 import is.rmob.supershulkers.enchantments.EnlargeEnchantment;
 import is.rmob.supershulkers.enchantments.RestockEnchantment;
 import is.rmob.supershulkers.enchantments.VacuumEnchantment;
@@ -15,10 +14,12 @@ import net.minecraft.util.registry.Registry;
 public class SuperShulkers implements ModInitializer {
 	private static final Logger LOGGER = LogManager.getLogger(SuperShulkers.class);
 
+	private SuperShulkersExtension carpetExtension;
+
 	@Override
 	public void onInitialize() {
 		this.registerEnchantments();
-		this.registerScarpetApp();
+		this.registerCarpetExtension();
 	}
 
 	private void registerEnchantments() {
@@ -47,10 +48,10 @@ public class SuperShulkers implements ModInitializer {
 		LOGGER.info("Registered enchantment {}", VACUUM_ENCHANTMENT);
 	}
 
-	private void registerScarpetApp() {
-		BundledModule superShulkersApp = BundledModule.fromPath("assets/supershulkers/scripts/", "supershulkers", false);
-		CarpetScriptServer.registerBuiltInScript(superShulkersApp);
+	private void registerCarpetExtension() {
+		this.carpetExtension = new SuperShulkersExtension();
+		CarpetServer.manageExtension(this.carpetExtension);
 
-		LOGGER.info("Registered scarpet app {}", superShulkersApp);
+		LOGGER.info("Registered scarpet extension {}", this.carpetExtension);
 	}
 }
