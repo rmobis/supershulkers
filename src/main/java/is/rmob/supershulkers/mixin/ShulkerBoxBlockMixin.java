@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import static is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget.isShulkerBox;
+
 import is.rmob.supershulkers.ducks.CustomEnchantmentHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,6 +23,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.DyeColor;
@@ -42,7 +45,9 @@ abstract class ShulkerBoxBlockMixin extends Block {
 	@Shadow
 	public static ItemStack getItemStack(DyeColor c) { return null; }
 
-	private void rebuildStackEnchantments(ItemStack stack, ListTag enchantmentTags) {
+	private void rebuildStackEnchantments(ItemStack stack, ShulkerBoxBlockEntity sbEntity) {
+		ListTag enchantmentTags = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
+
 		for(int i = 0; i < enchantmentTags.size(); ++i) {
 			CompoundTag ench = enchantmentTags.getCompound(i);
 
@@ -55,10 +60,17 @@ abstract class ShulkerBoxBlockMixin extends Block {
 
 	@Inject(
 		method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/loot/context/LootContext$Builder;)Ljava/util/List;",
-		at = @At("HEAD")
+		at = @At("RETURN")
 	)
 	public void onGetDroppedStacks(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> ci) {
-		System.out.println("onGetDroppedStacks");
+		for (ItemStack stack : ci.getReturnValue()) {
+			if (isShulkerBox(stack.getItem())) {
+				BlockEntity blockEntity = (BlockEntity)builder.getNullable(LootContextParameters.BLOCK_ENTITY);
+				if (blockEntity instanceof ShulkerBoxBlockEntity) {
+					rebuildStackEnchantments(stack, (ShulkerBoxBlockEntity)blockEntity);
+				}
+			}
+		}
 	}
 
 	@Overwrite
@@ -76,7 +88,7 @@ abstract class ShulkerBoxBlockMixin extends Block {
 				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
 
 				// added call
-				rebuildStackEnchantments(itemStack, enchantmentTags);
+				rebuildStackEnchantments(itemStack, shulkerBoxBlockEntity);
 
 				if (!newBeTag.isEmpty()) {
 					itemStack.putSubTag("BlockEntityTag", newBeTag);
