@@ -2,6 +2,8 @@
 // vacuum and restock
 // by gnembon
 // (keep ability added by Senth)
+//
+// https://github.com/gnembon/scarpet/blob/master/programs/survival/shulkerboxes.sc
 ///
 
 // stay loaded
