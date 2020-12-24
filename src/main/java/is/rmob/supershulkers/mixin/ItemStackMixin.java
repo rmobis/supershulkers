@@ -16,7 +16,7 @@ import net.minecraft.nbt.Tag;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-	
+
 	@Shadow
 	public abstract Item getItem();
 
@@ -28,7 +28,7 @@ public abstract class ItemStackMixin {
 
 	@Shadow
 	public abstract CompoundTag getTag();
-	
+
 	@Inject(
 		method= "addEnchantment(Lnet/minecraft/enchantment/Enchantment;I)V",
 		at=@At("RETURN")

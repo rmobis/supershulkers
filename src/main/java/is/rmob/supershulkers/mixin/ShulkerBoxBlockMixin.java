@@ -7,9 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import static is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget.isShulkerBox;
 
@@ -34,21 +32,21 @@ import net.minecraft.world.World;
 
 @Mixin(ShulkerBoxBlock.class)
 abstract class ShulkerBoxBlockMixin extends Block {
-	
+
 	public ShulkerBoxBlockMixin(Settings settings) {
 		super(settings);
 	}
-	
+
 	@Shadow
 	public DyeColor getColor() { return DyeColor.BLACK; }
-	
+
 	@Shadow
 	public static ItemStack getItemStack(DyeColor c) { return null; }
 
 	private void rebuildStackEnchantments(ItemStack stack, ShulkerBoxBlockEntity sbEntity) {
 		ListTag enchantmentTags = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
 
-		for(int i = 0; i < enchantmentTags.size(); ++i) {
+		for (int i = 0; i < enchantmentTags.size(); ++i) {
 			CompoundTag ench = enchantmentTags.getCompound(i);
 
 			String enchId = ench.getString("id");
@@ -93,11 +91,11 @@ abstract class ShulkerBoxBlockMixin extends Block {
 				if (!newBeTag.isEmpty()) {
 					itemStack.putSubTag("BlockEntityTag", newBeTag);
 				}
-				
+
 				if (shulkerBoxBlockEntity.hasCustomName()) {
 					itemStack.setCustomName(shulkerBoxBlockEntity.getCustomName());
 				}
-				
+
 				ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, itemStack);
 				itemEntity.setToDefaultPickupDelay();
 				world.spawnEntity(itemEntity);
@@ -105,23 +103,7 @@ abstract class ShulkerBoxBlockMixin extends Block {
 				shulkerBoxBlockEntity.checkLootInteraction(player);
 			}
 		}
-		
+
 		super.onBreak(world, pos, state, player);
 	}
-	
-	// @Inject(
-	// 	method= "onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V",
-	// 	at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;serializeInventory(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"),
-	// 	locals = LocalCapture.CAPTURE_FAILEXCEPTION
-	// )
-	// public void onOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci, BlockEntity _, ShulkerBoxBlockEntity sbEntity, ItemStack itemStack, CompoundTag newBeTag) {
-	// 	ListTag enchantmentTags = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
-	// 	if (!enchantmentTags.isEmpty()) {
-	// 		newBeTag.put("Enchantments", enchantmentTags);
-	// 		itemStack.putSubTag("Enchantments", enchantmentTags);
-
-	// 		System.out.println("enchantmentTags");
-	// 		System.out.println(enchantmentTags);
-	// 	}
-	// }
 }

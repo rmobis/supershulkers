@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
 
 public class EarlyRiser implements Runnable {
-	
+
 	// We add a new entry to the EnchantmentTarget enum (through the intermediary name), using our
 	// ShulkerBoxEnchantmentTarget class, which is where the actual functionality is implemented
 	@Override
