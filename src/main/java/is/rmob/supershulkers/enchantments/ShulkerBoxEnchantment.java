@@ -1,4 +1,4 @@
-package is.enchantments;
+package is.rmob.supershulkers.enchantments;
 
 import com.chocohead.mm.api.ClassTinkerers;
 
