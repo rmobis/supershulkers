@@ -1,15 +1,17 @@
 package is.rmob.supershulkers.mixin;
 
+import static is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget.isShulkerBox;
+
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget.isShulkerBox;
 
 import is.rmob.supershulkers.ducks.CustomEnchantmentHolder;
 import net.minecraft.block.Block;
@@ -32,6 +34,7 @@ import net.minecraft.world.World;
 
 @Mixin(ShulkerBoxBlock.class)
 abstract class ShulkerBoxBlockMixin extends Block {
+	private static final Logger LOGGER = LogManager.getLogger(ShulkerBoxBlockMixin.class);
 
 	public ShulkerBoxBlockMixin(Settings settings) {
 		super(settings);
@@ -53,6 +56,8 @@ abstract class ShulkerBoxBlockMixin extends Block {
 			int enchLvl = ench.getShort("lvl");
 
 			stack.addEnchantment(Registry.ENCHANTMENT.get(new Identifier(enchId)), enchLvl);
+
+			LOGGER.debug("Rebuilt enchantment {} (lvl {}) onto {}", enchId, enchLvl, stack);
 		}
 	}
 

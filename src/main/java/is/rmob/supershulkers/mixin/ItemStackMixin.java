@@ -1,5 +1,7 @@
 package is.rmob.supershulkers.mixin;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.Tag;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
+	private static final Logger LOGGER = LogManager.getLogger(ItemStackMixin.class);
 
 	@Shadow
 	public abstract Item getItem();
@@ -44,8 +47,9 @@ public abstract class ItemStackMixin {
 			}
 
 			beTag.put("Enchantments", this.getTag().get("Enchantments"));
-
 			putSubTag("BlockEntityTag", beTag);
+
+			LOGGER.debug("Persisted enchantment data {} into BET", this.getTag().get("Enchantments"));
 		}
 	}
 }
