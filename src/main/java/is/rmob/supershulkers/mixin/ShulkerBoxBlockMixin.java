@@ -24,7 +24,9 @@ import net.minecraft.loot.context.LootContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @Mixin(ShulkerBoxBlock.class)
@@ -40,6 +42,17 @@ abstract class ShulkerBoxBlockMixin extends Block {
 	@Shadow
 	public static ItemStack getItemStack(DyeColor c) { return null; }
 
+	private void rebuildStackEnchantments(ItemStack stack, ListTag enchantmentTags) {
+		for(int i = 0; i < enchantmentTags.size(); ++i) {
+			CompoundTag ench = enchantmentTags.getCompound(i);
+
+			String enchId = ench.getString("id");
+			int enchLvl = ench.getShort("lvl");
+
+			stack.addEnchantment(Registry.ENCHANTMENT.get(new Identifier(enchId)), enchLvl);
+		}
+	}
+
 	@Inject(
 		method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/loot/context/LootContext$Builder;)Ljava/util/List;",
 		at = @At("HEAD")
@@ -47,7 +60,6 @@ abstract class ShulkerBoxBlockMixin extends Block {
 	public void onGetDroppedStacks(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> ci) {
 		System.out.println("onGetDroppedStacks");
 	}
-
 
 	@Overwrite
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
@@ -58,16 +70,13 @@ abstract class ShulkerBoxBlockMixin extends Block {
 			// added line
 			ListTag enchantmentTags = ((CustomEnchantmentHolder) shulkerBoxBlockEntity).getEnchantments();
 
-			// we modify this if statement so that it triggers when the shulkerbox has enchantments too
+			// we modify this if statement so that it triggers when the shulker box has enchantments too
 			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchantmentTags.isEmpty())) {
 				ItemStack itemStack = getItemStack(this.getColor());
 				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
 
-				// added if
-				if (!enchantmentTags.isEmpty()) {
-					newBeTag.put("Enchantments", enchantmentTags);
-					itemStack.putSubTag("Enchantments", enchantmentTags);
-				}
+				// added call
+				rebuildStackEnchantments(itemStack, enchantmentTags);
 
 				if (!newBeTag.isEmpty()) {
 					itemStack.putSubTag("BlockEntityTag", newBeTag);
