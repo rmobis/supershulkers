@@ -1,4 +1,4 @@
-package is.rmob.supershulkers.enchantments;
+package is.rmob.supershulkers.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 

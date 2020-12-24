@@ -1,4 +1,4 @@
-package is.rmob.supershulkers.ducks;
+package is.rmob.supershulkers.duck;
 
 import java.util.Map;
 

@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import carpet.CarpetServer;
-import is.rmob.supershulkers.enchantments.EnlargeEnchantment;
-import is.rmob.supershulkers.enchantments.RestockEnchantment;
-import is.rmob.supershulkers.enchantments.VacuumEnchantment;
+import is.rmob.supershulkers.enchantment.EnlargeEnchantment;
+import is.rmob.supershulkers.enchantment.RestockEnchantment;
+import is.rmob.supershulkers.enchantment.VacuumEnchantment;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

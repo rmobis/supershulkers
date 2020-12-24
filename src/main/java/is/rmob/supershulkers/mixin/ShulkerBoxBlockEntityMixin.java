@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import is.rmob.supershulkers.ducks.CustomEnchantmentHolder;
+import is.rmob.supershulkers.duck.CustomEnchantmentHolder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.enchantment.Enchantment;
