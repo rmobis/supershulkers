@@ -18,6 +18,9 @@ repositories {
 		name = "jitpack"
 		url = 'https://jitpack.io'
 	}
+	maven {
+		url 'https://masa.dy.fi/maven'
+	}
 }
 
 dependencies {
@@ -29,10 +32,12 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // fabric-asm / Manningham-Mills
+	modImplementation "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
+
+	// fabric-asm / Manningham-Mills
 	// Not sure why we need it in modImplementation AND include, but it works
-    modImplementation 'com.github.Chocohead:Fabric-ASM:v2.0.1'
-    include 'com.github.Chocohead:Fabric-ASM:v2.0.1'
+	modImplementation 'com.github.Chocohead:Fabric-ASM:v2.0.1'
+	include 'com.github.Chocohead:Fabric-ASM:v2.0.1'
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
