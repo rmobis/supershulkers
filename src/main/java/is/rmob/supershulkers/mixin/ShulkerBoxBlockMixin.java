@@ -54,13 +54,16 @@ abstract class ShulkerBoxBlockMixin extends Block {
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity instanceof ShulkerBoxBlockEntity) {
 			ShulkerBoxBlockEntity shulkerBoxBlockEntity = (ShulkerBoxBlockEntity)blockEntity;
+
+			// added line
 			ListTag enchantmentTags = ((CustomEnchantmentHolder) shulkerBoxBlockEntity).getEnchantments();
+
+			// we modify this if statement so that it triggers when the shulkerbox has enchantments too
 			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchantmentTags.isEmpty())) {
 				ItemStack itemStack = getItemStack(this.getColor());
 				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
 
-				System.out.println("enchantmentTags");
-				System.out.println(enchantmentTags);
+				// added if
 				if (!enchantmentTags.isEmpty()) {
 					newBeTag.put("Enchantments", enchantmentTags);
 					itemStack.putSubTag("Enchantments", enchantmentTags);
@@ -69,8 +72,6 @@ abstract class ShulkerBoxBlockMixin extends Block {
 				if (!newBeTag.isEmpty()) {
 					itemStack.putSubTag("BlockEntityTag", newBeTag);
 				}
-				System.out.println("itemStack tags");
-				System.out.println(itemStack.getTag());
 				
 				if (shulkerBoxBlockEntity.hasCustomName()) {
 					itemStack.setCustomName(shulkerBoxBlockEntity.getCustomName());
