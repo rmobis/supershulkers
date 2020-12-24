@@ -3,12 +3,14 @@ package is.rmob.supershulkers.mixin;
 import static is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget.isShulkerBox;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -19,17 +21,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @Mixin(ShulkerBoxBlock.class)
@@ -46,19 +47,13 @@ abstract class ShulkerBoxBlockMixin extends Block {
 	@Shadow
 	public static ItemStack getItemStack(DyeColor c) { return null; }
 
+	@Unique
 	private void rebuildStackEnchantments(ItemStack stack, ShulkerBoxBlockEntity sbEntity) {
-		ListTag enchantmentTags = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
+		Map<Enchantment, Integer> enchantmentMap = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
 
-		for (int i = 0; i < enchantmentTags.size(); ++i) {
-			CompoundTag ench = enchantmentTags.getCompound(i);
+		EnchantmentHelper.set(enchantmentMap, stack);
 
-			String enchId = ench.getString("id");
-			int enchLvl = ench.getShort("lvl");
-
-			stack.addEnchantment(Registry.ENCHANTMENT.get(new Identifier(enchId)), enchLvl);
-
-			LOGGER.debug("Rebuilt enchantment {} (lvl {}) onto {}", enchId, enchLvl, stack);
-		}
+		LOGGER.info("Rebuilt enchantments {} onto {}", enchantmentMap, stack);
 	}
 
 	@Inject(
@@ -83,10 +78,10 @@ abstract class ShulkerBoxBlockMixin extends Block {
 			ShulkerBoxBlockEntity shulkerBoxBlockEntity = (ShulkerBoxBlockEntity)blockEntity;
 
 			// added line
-			ListTag enchantmentTags = ((CustomEnchantmentHolder) shulkerBoxBlockEntity).getEnchantments();
+			Map<Enchantment, Integer> enchantmentMap = ((CustomEnchantmentHolder) shulkerBoxBlockEntity).getEnchantments();
 
 			// we modify this if statement so that it triggers when the shulker box has enchantments too
-			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchantmentTags.isEmpty())) {
+			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchantmentMap.isEmpty())) {
 				ItemStack itemStack = getItemStack(this.getColor());
 				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
 
