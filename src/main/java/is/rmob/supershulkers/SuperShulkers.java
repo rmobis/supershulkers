@@ -14,16 +14,20 @@ import net.minecraft.util.registry.Registry;
 public class SuperShulkers implements ModInitializer {
 	private static final Logger LOGGER = LogManager.getLogger(SuperShulkers.class);
 
-	private SuperShulkersExtension carpetExtension;
+	public static EnlargeEnchantment ENLARGE_ENCHANTMENT;
+	public static RestockEnchantment RESTOCK_ENCHANTMENT;
+	public static VacuumEnchantment VACUUM_ENCHANTMENT;
 
 	@Override
 	public void onInitialize() {
 		this.registerEnchantments();
 		this.registerCarpetExtension();
+
+		LOGGER.debug("debugging?");
 	}
 
 	private void registerEnchantments() {
-		EnlargeEnchantment ENLARGE_ENCHANTMENT = Registry.register(
+		SuperShulkers.ENLARGE_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
 			new Identifier("supershulkers", "enlarge"),
 			new EnlargeEnchantment()
@@ -31,7 +35,7 @@ public class SuperShulkers implements ModInitializer {
 
 		LOGGER.info("Registered enchantment {}", ENLARGE_ENCHANTMENT);
 
-		RestockEnchantment RESTOCK_ENCHANTMENT = Registry.register(
+		SuperShulkers.RESTOCK_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
 			new Identifier("supershulkers", "restock"),
 			new RestockEnchantment()
@@ -39,7 +43,7 @@ public class SuperShulkers implements ModInitializer {
 
 		LOGGER.info("Registered enchantment {}", RESTOCK_ENCHANTMENT);
 
-		VacuumEnchantment VACUUM_ENCHANTMENT = Registry.register(
+		SuperShulkers.VACUUM_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
 			new Identifier("supershulkers", "vacuum"),
 			new VacuumEnchantment()
@@ -49,9 +53,9 @@ public class SuperShulkers implements ModInitializer {
 	}
 
 	private void registerCarpetExtension() {
-		this.carpetExtension = new SuperShulkersExtension();
-		CarpetServer.manageExtension(this.carpetExtension);
+		SuperShulkersExtension carpetExtension = new SuperShulkersExtension();
+		CarpetServer.manageExtension(carpetExtension);
 
-		LOGGER.info("Registered scarpet extension {}", this.carpetExtension);
+		LOGGER.info("Registered scarpet extension {}", carpetExtension);
 	}
 }
