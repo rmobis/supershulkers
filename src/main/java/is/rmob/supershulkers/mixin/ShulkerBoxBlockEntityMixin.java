@@ -38,11 +38,17 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	@Unique
 	private Map<Enchantment, Integer> enchantmentMap = new HashMap<>();
 
-	@Override
-	public abstract Map<Enchantment, Integer> getEnchantments();
-
 	@Shadow
 	private DefaultedList<ItemStack> inventory;
+
+
+	/**
+	 * Allows us to access enchantments in a map format.
+	 */
+	@Override
+	public Map<Enchantment, Integer> getEnchantments() {
+		return enchantmentMap;
+	}
 
 
 	/**
