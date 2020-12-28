@@ -63,7 +63,7 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 				BlockEntity blockEntity = builder.getNullable(LootContextParameters.BLOCK_ENTITY);
 
 				if (blockEntity instanceof ShulkerBoxBlockEntity) {
-					ShulkerUtil.rebuildStackEnchantments(stack, (ShulkerBoxBlockEntity)blockEntity);
+					ShulkerUtil.rebuildStackEnchantments(stack, (CustomEnchantmentHolder) blockEntity);
 				}
 			}
 		}
@@ -105,16 +105,18 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		if (blockEntity instanceof ShulkerBoxBlockEntity) {
 			ShulkerBoxBlockEntity shulkerBoxBlockEntity = (ShulkerBoxBlockEntity)blockEntity;
 
-			// added line
-			Map<Enchantment, Integer> enchantmentMap = ((CustomEnchantmentHolder) shulkerBoxBlockEntity).getEnchantments();
+			// added lines
+			CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) shulkerBoxBlockEntity;
+			Map<Enchantment, Integer> enchMap = enchHolder.getEnchantments();
 
 			// we modify this if statement so that it triggers when the shulker box has enchantments too
-			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchantmentMap.isEmpty())) {
+			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchMap.isEmpty())) {
 				ItemStack itemStack = getItemStack(this.getColor());
 				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
 
 				// added call
-				ShulkerUtil.rebuildStackEnchantments(itemStack, shulkerBoxBlockEntity);
+				ShulkerUtil.rebuildStackEnchantments(itemStack, enchMap);
+				newBeTag.put("Enchantments", enchHolder.getEnchantmentTag());
 
 				if (!newBeTag.isEmpty()) {
 					//noinspection ConstantConditions

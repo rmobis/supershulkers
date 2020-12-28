@@ -105,8 +105,8 @@ public abstract class ShulkerUtil {
 	/**
 	 * Reapplies all enchantments to the newly generated stack, probably after breaking the placed shulker box.
 	 */
-	public static void rebuildStackEnchantments(ItemStack stack, ShulkerBoxBlockEntity sbEntity) {
-		Map<Enchantment, Integer> enchMap = ((CustomEnchantmentHolder) sbEntity).getEnchantments();
+	public static void rebuildStackEnchantments(ItemStack stack, CustomEnchantmentHolder sbEntity) {
+		Map<Enchantment, Integer> enchMap = sbEntity.getEnchantments();
 
 		rebuildStackEnchantments(stack, enchMap);
 	}

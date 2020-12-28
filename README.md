@@ -5,5 +5,4 @@ This is just a mod to add a little flourish to @gnembom's shulkerboxes [script](
 ## Known Issues
 
 - using a grindstone to disenchant doesn't work
-- putting any item inside a shulker box, breaking it and placing it again loses enchantments
 - anvils don't work properly
