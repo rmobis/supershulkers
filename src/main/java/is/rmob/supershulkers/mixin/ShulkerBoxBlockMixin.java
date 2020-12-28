@@ -28,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 import java.util.Map;
@@ -78,9 +79,10 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		at = @At(
 			value = "INVOKE_ASSIGN",
 			target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;serializeInventory(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"
-		)
+		),
+		locals = LocalCapture.CAPTURE_FAILHARD
 	)
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci, ShulkerBoxBlockEntity sbEntity, ItemStack stack, CompoundTag beTag) {
+	public void rebuildEnchantmentsOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci, BlockEntity __, ShulkerBoxBlockEntity sbEntity, ItemStack stack, CompoundTag beTag) {
 		LOGGER.trace("hijacking onBreak ({}, {}, {}, {})", world, pos, state, player);
 
 		CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) sbEntity;
