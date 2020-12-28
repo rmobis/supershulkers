@@ -56,6 +56,8 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		at = @At("RETURN")
 	)
 	public void onGetDroppedStacks(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> ci) {
+		LOGGER.trace("hijacking onGetDroppedStacks ({}, {})", state, builder);
+
 		for (ItemStack stack : ci.getReturnValue()) {
 			if (ShulkerUtil.isShulkerBox(stack.getItem())) {
 				BlockEntity blockEntity = builder.getNullable(LootContextParameters.BLOCK_ENTITY);
@@ -79,6 +81,8 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		constant = @Constant(intValue = 27)
 	)
 	public int modifyTooltipSlots(int tooltipSlots) {
+		LOGGER.trace("hijacking appendTooltip ({})", tooltipSlots);
+
 		// TODO: un-hardcode
 		return ShulkerUtil.getInventorySize(3);
 	}
@@ -95,6 +99,8 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 	 */
 	@Overwrite
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		LOGGER.trace("hijacking onBreak ({}, {}, {}, {})", world, pos, state, player);
+
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity instanceof ShulkerBoxBlockEntity) {
 			ShulkerBoxBlockEntity shulkerBoxBlockEntity = (ShulkerBoxBlockEntity)blockEntity;
