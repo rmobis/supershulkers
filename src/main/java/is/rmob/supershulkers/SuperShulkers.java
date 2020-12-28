@@ -18,13 +18,13 @@ public class SuperShulkers implements ModInitializer {
 	public static RestockEnchantment RESTOCK_ENCHANTMENT;
 	public static VacuumEnchantment VACUUM_ENCHANTMENT;
 
+
 	@Override
 	public void onInitialize() {
 		this.registerEnchantments();
 		this.registerCarpetExtension();
-
-		LOGGER.debug("debugging?");
 	}
+
 
 	private void registerEnchantments() {
 		SuperShulkers.ENLARGE_ENCHANTMENT = Registry.register(
@@ -51,6 +51,7 @@ public class SuperShulkers implements ModInitializer {
 
 		LOGGER.info("Registered enchantment {}", VACUUM_ENCHANTMENT);
 	}
+
 
 	private void registerCarpetExtension() {
 		SuperShulkersExtension carpetExtension = new SuperShulkersExtension();

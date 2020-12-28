@@ -16,9 +16,11 @@ public class SuperShulkersExtension implements CarpetExtension {
 
 	private BundledModule superShulkersApp;
 
+
 	public SuperShulkersExtension() {
 		this.registerScarpetApp();
 	}
+
 
 	private void registerScarpetApp() {
 		this.superShulkersApp = BundledModule.fromPath("assets/supershulkers/scripts/", SuperShulkersExtension.SCARPET_APP, false);
@@ -26,6 +28,7 @@ public class SuperShulkersExtension implements CarpetExtension {
 
 		LOGGER.info("Registered scarpet app {}", this.superShulkersApp);
 	}
+
 
 	@Override
 	public void onServerLoadedWorlds(MinecraftServer server) {

@@ -1,13 +1,12 @@
 package is.rmob.supershulkers.mixin;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.mixin.Mixin;
-
-import is.rmob.supershulkers.asm.ShulkerBoxEnchantmentTarget;
+import is.rmob.supershulkers.ShulkerUtil;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(BlockItem.class)
 public abstract class BlockItemMixin extends Item {
@@ -19,15 +18,15 @@ public abstract class BlockItemMixin extends Item {
 
 
 	/**
-	 * We override the isEnchantable method so we can hijack it and trick the game into allowing
-	 * us to enchant shulker boxes.
-	 *
-	 * @param stack
-	 * @return boolean
+	 * We override the isEnchantable method so we can hijack it and trick the game into allowing us to enchant shulker
+	 * boxes through the enchanting table.
 	 */
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
-		if (ShulkerBoxEnchantmentTarget.SHULKER_BOXES.contains(this)) {
+		LOGGER.trace("hijacking isEnchantable ({})", stack);
+
+		if (ShulkerUtil.isShulkerBox(stack.getItem())) {
+
 			// While shulker boxes can't usually be stacked, we double check this
 			// here to avoid conflicts with other mods
 			return stack.getCount() == 1;
@@ -38,11 +37,15 @@ public abstract class BlockItemMixin extends Item {
 
 
 	/**
-	 * @return int
+	 * We override the getEnchantability method so we can hijack it and trick the game into allowing us to enchant
+	 * shulker boxes through the enchanting table.
 	 */
 	@Override
 	public int getEnchantability() {
-		if (ShulkerBoxEnchantmentTarget.SHULKER_BOXES.contains(this)) {
+		LOGGER.trace("hijacking getEnchantability");
+
+		if (ShulkerUtil.isShulkerBox(this)) {
+
 			// Should probably investigate what exactly values > 1 mean, but it works
 			return 1;
 		}

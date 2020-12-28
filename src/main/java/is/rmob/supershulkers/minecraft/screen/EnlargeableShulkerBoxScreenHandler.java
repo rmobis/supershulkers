@@ -1,7 +1,5 @@
 package is.rmob.supershulkers.minecraft.screen;
 
-import java.util.Map;
-
 import is.rmob.supershulkers.SuperShulkers;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,6 +9,8 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.ShulkerBoxSlot;
 import net.minecraft.screen.slot.Slot;
+
+import java.util.Map;
 
 public class EnlargeableShulkerBoxScreenHandler extends GenericContainerScreenHandler {
 	public static EnlargeableShulkerBoxScreenHandler createFromEnchantments(int syncId, PlayerInventory playerInventory, Inventory inventory, Map<Enchantment, Integer> enchMap) {
