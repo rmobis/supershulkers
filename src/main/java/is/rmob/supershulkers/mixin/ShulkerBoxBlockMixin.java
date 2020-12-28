@@ -10,7 +10,6 @@ import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
@@ -22,12 +21,12 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -71,6 +70,27 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 
 
 	/**
+	 * Modifies the dropped stack (usually a single shulker box item) to add back the enchantments. I believe this only
+	 * applies to creative.
+	 */
+	@Inject(
+		method = "onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V",
+		at = @At(
+			value = "INVOKE_ASSIGN",
+			target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;serializeInventory(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"
+		)
+	)
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci, ShulkerBoxBlockEntity sbEntity, ItemStack stack, CompoundTag beTag) {
+		LOGGER.trace("hijacking onBreak ({}, {}, {}, {})", world, pos, state, player);
+
+		CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) sbEntity;
+		Map<Enchantment, Integer> enchMap = enchHolder.getEnchantments();
+		ShulkerUtil.rebuildStackEnchantments(stack, enchMap);
+		beTag.put("Enchantments", enchHolder.getEnchantmentTag());
+	}
+
+
+	/**
 	 * Modifies the hardcoded number of slots that the tooltip checks for when building the list of items inside the
 	 * shulker box. Without this, no items after the 27th slot would show on the tooltip and it could display as empty
 	 * when in reality full of goodies.
@@ -84,57 +104,5 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		LOGGER.trace("hijacking appendTooltip ({})", tooltipSlots);
 
 		return ShulkerUtil.getInventorySize(stack.getEnchantments());
-	}
-
-
-	/**
-	 * Pretty much the original method, with very few additions that modify the dropped stack (usually a single shulker
-	 * box item) to add back the enchantments and also makes the shulker box drop when it is empty but has enchantments
-	 * (should probably reevaluate that). I believe this only applies to creative.
-	 *
-	 * TODO: find a more elegant way to do this, possibly without overwriting the whole method
-	 *
-	 * @author rmobis
-	 */
-	@Overwrite
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		LOGGER.trace("hijacking onBreak ({}, {}, {}, {})", world, pos, state, player);
-
-		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof ShulkerBoxBlockEntity) {
-			ShulkerBoxBlockEntity shulkerBoxBlockEntity = (ShulkerBoxBlockEntity)blockEntity;
-
-			// added lines
-			CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) shulkerBoxBlockEntity;
-			Map<Enchantment, Integer> enchMap = enchHolder.getEnchantments();
-
-			// we modify this if statement so that it triggers when the shulker box has enchantments too
-			if (!world.isClient && player.isCreative() && (!shulkerBoxBlockEntity.isEmpty() || !enchMap.isEmpty())) {
-				ItemStack itemStack = getItemStack(this.getColor());
-				CompoundTag newBeTag = shulkerBoxBlockEntity.serializeInventory(new CompoundTag());
-
-				// added call
-				ShulkerUtil.rebuildStackEnchantments(itemStack, enchMap);
-				newBeTag.put("Enchantments", enchHolder.getEnchantmentTag());
-
-				if (!newBeTag.isEmpty()) {
-					//noinspection ConstantConditions
-					itemStack.putSubTag("BlockEntityTag", newBeTag);
-				}
-
-				if (shulkerBoxBlockEntity.hasCustomName()) {
-					//noinspection ConstantConditions
-					itemStack.setCustomName(shulkerBoxBlockEntity.getCustomName());
-				}
-
-				ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, itemStack);
-				itemEntity.setToDefaultPickupDelay();
-				world.spawnEntity(itemEntity);
-			} else {
-				shulkerBoxBlockEntity.checkLootInteraction(player);
-			}
-		}
-
-		super.onBreak(world, pos, state, player);
 	}
 }
