@@ -8,6 +8,7 @@ import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -74,10 +75,31 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	}
 
 
+	@Unique
+	private void updateInventorySize() {
+		int newInvSize = ShulkerUtil.getInventorySize(this.getEnchantments());
+
+		if (this.inventory.size() >= newInvSize) {
+			return;
+		}
+
+		DefaultedList<ItemStack> newInv = DefaultedList.ofSize(newInvSize, ItemStack.EMPTY);
+
+		for (int i = 0; i < this.inventory.size(); i++) {
+			newInv.set(i, this.inventory.get(i));
+		}
+
+		this.inventory = newInv;
+	}
+
+
 	/**
 	 * Recovers enchantment map from BET.
 	 */
-	@Inject(method = "fromTag(Lnet/minecraft/block/BlockState;Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+	@Inject(
+		method = "fromTag(Lnet/minecraft/block/BlockState;Lnet/minecraft/nbt/CompoundTag;)V",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;deserializeInventory(Lnet/minecraft/nbt/CompoundTag;)V")
+	)
 	public void recoverEnchantmentsFromTag(BlockState state, CompoundTag tag, CallbackInfo ci) {
 		LOGGER.trace("hijacking fromTag ({}, {})", state, tag);
 
@@ -85,6 +107,8 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 			this.enchantmentMap = EnchantmentHelper.fromTag(tag.getList("Enchantments", 10));
 
 			LOGGER.info("Recovered enchantment map {} from NBT", this.getEnchantments());
+
+			updateInventorySize();
 		}
 	}
 
@@ -150,7 +174,8 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 		return EnlargeableShulkerBoxScreenHandler.createFromEnchantments(
 			syncId,
 			playerInventory,
-			(ShulkerBoxBlockEntity) (Object) this, this.getEnchantments()
+			(Inventory) this,
+			this.getEnchantments()
 		);
 	}
 

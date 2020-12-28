@@ -80,11 +80,10 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 		method = "appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/BlockView;Ljava/util/List;Lnet/minecraft/client/item/TooltipContext;)V",
 		constant = @Constant(intValue = 27)
 	)
-	public int modifyTooltipSlots(int tooltipSlots) {
+	public int modifyTooltipSlots(int tooltipSlots, ItemStack stack) {
 		LOGGER.trace("hijacking appendTooltip ({})", tooltipSlots);
 
-		// TODO: un-hardcode
-		return ShulkerUtil.getInventorySize(3);
+		return ShulkerUtil.getInventorySize(stack.getEnchantments());
 	}
 
 
