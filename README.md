@@ -35,6 +35,8 @@ Items picked up will go directly into any shulker box that contains an incomplet
 - [ ] implement vacuum/restock functionality "natively"
 - [ ] drop overflown items when removing enlarge enchantment
 - [ ] fix pick block in creative not preserving enchantments
+- [ ] add translation keys to `enchantment.supershulkers.*.desc` and `enchantedtooltip.enchant.type.SHULER_BOX` for EnchantedTooltips compatibility
+- [ ] think of more "minecrafty" names for enchantments
 - [ ] get a damn logo
 
 
