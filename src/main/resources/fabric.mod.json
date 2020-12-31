@@ -4,7 +4,7 @@
 	"version": "${version}",
 
 	"name": "Super Shulkers",
-	"description": "Gives shulker boxes superpowers.",
+	"description": "Gives shulker boxes super powers.",
 	"authors": [
 		"rmobis"
 	],
@@ -14,7 +14,7 @@
 	},
 
 	"license": "MIT",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/supershulkers/icon.png",
 
 	"environment": "*",
 	"entrypoints": {
