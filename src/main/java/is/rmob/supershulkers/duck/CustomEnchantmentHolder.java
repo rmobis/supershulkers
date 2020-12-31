@@ -11,5 +11,9 @@ import java.util.Map;
 public interface CustomEnchantmentHolder {
 	public Map<Enchantment, Integer> getEnchantments();
 
+	public void setEnchantments(Map<Enchantment, Integer> enchMap);
+
+	public void setEnchantments(ListTag enchTag);
+
 	public ListTag getEnchantmentTag();
 }

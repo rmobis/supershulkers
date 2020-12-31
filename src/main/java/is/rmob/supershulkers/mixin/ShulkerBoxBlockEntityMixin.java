@@ -52,6 +52,19 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	}
 
 
+	@Override
+	public void setEnchantments(Map<Enchantment, Integer> enchMap) {
+		this.enchantmentMap = enchMap;
+
+		updateInventorySize();
+	}
+
+
+	@Override
+	public void setEnchantments(ListTag enchTag) {
+		setEnchantments(EnchantmentHelper.fromTag(enchTag));
+	}
+
 	/**
 	 * Rebuild enchantment NBT from enchantment map.
 	 */
@@ -104,11 +117,9 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 		LOGGER.trace("hijacking fromTag ({}, {})", state, tag);
 
 		if (tag.contains("Enchantments", 9)) {
-			this.enchantmentMap = EnchantmentHelper.fromTag(tag.getList("Enchantments", 10));
+			setEnchantments(tag.getList("Enchantments", 10));
 
 			LOGGER.info("Recovered enchantment map {} from NBT", this.getEnchantments());
-
-			updateInventorySize();
 		}
 	}
 
@@ -129,20 +140,16 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 
 
 	/**
-	 * Very simple overwrite, only to increase the amount of slots on the final field AVAILABLE_SLOTS. Not exactly sure
-	 * what this does or why it is needed, but it seems to help make things work.
-	 *
-	 * TODO: verify possibility of using accessors (?)
-	 *
-	 * @author rmobis
+	 * Short circuit only to increase the amount of "available" slots based on enchantment.
 	 */
-	@Overwrite
-	public int[] getAvailableSlots(Direction side) {
+	@Inject(method = "getAvailableSlots(Lnet/minecraft/util/math/Direction;)[I", at = @At("HEAD"), cancellable = true)
+	public void getAvailableSlots(Direction side, CallbackInfoReturnable<int[]> ci) {
 		LOGGER.trace("hijacking getAvailableSlots ({})", side);
 
 		int invSize = ShulkerUtil.getInventorySize(this.getEnchantments());
+		int[] availableSlots = IntStream.range(0, invSize).toArray();
 
-		return IntStream.range(0, invSize).toArray();
+		ci.setReturnValue(availableSlots);
 	}
 
 
