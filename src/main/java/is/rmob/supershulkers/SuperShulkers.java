@@ -1,5 +1,6 @@
 package is.rmob.supershulkers;
 
+import is.rmob.supershulkers.compat.SuperShulkersCarpetExtension;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +57,7 @@ public class SuperShulkers implements ModInitializer {
 
 
 	private void registerCarpetExtension() {
-		SuperShulkersExtension carpetExtension = new SuperShulkersExtension();
+		SuperShulkersCarpetExtension carpetExtension = new SuperShulkersCarpetExtension();
 		CarpetServer.manageExtension(carpetExtension);
 
 		LOGGER.info("Registered scarpet extension {}", carpetExtension);

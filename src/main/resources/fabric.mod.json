@@ -23,6 +23,9 @@
 		],
 		"mm:early_risers": [
 			"is.rmob.supershulkers.asm.EarlyRiser"
+		],
+		"shulkerboxtooltip": [
+			"is.rmob.supershulkers.compat.ShulkerBoxTooltipExtension"
 		]
 	},
 	"mixins": [
@@ -35,5 +38,9 @@
 		"minecraft": "1.16.x"
 	},
 	"suggests": {
+		"shulkerboxtooltip": ">=2.3.0"
+	},
+	"breaks": {
+		"shulkerboxtooltip": "<2.3.0"
 	}
 }

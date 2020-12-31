@@ -1,23 +1,23 @@
-package is.rmob.supershulkers;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package is.rmob.supershulkers.compat;
 
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import carpet.script.CarpetScriptServer;
 import carpet.script.bundled.BundledModule;
+import is.rmob.supershulkers.SuperShulkers;
 import net.minecraft.server.MinecraftServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class SuperShulkersExtension implements CarpetExtension {
-	private static final Logger LOGGER = LogManager.getLogger(SuperShulkersExtension.class);
+public class SuperShulkersCarpetExtension implements CarpetExtension {
+	private static final Logger LOGGER = LogManager.getLogger(SuperShulkersCarpetExtension.class);
 
 	private final static String SCARPET_APP = "supershulkers";
 
 	private BundledModule superShulkersApp;
 
 
-	public SuperShulkersExtension() {
+	public SuperShulkersCarpetExtension() {
 		this.registerScarpetApp();
 	}
 

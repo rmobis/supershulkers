@@ -18,14 +18,14 @@ repositories {
 	jcenter()
 
 	maven {
-		name = 'Fabric'
-		url = 'https://maven.fabricmc.net/'
-	}
-
-	maven {
 		name = "jitpack"
 		url = 'https://jitpack.io'
 	}
+
+    maven {
+        name = "ShulkerBoxTooltip"
+        url = "https://maven.misterpemodder.com/libs-release"
+    }
 
 	maven {
 		url 'https://masa.dy.fi/maven'
@@ -33,19 +33,25 @@ repositories {
 }
 
 dependencies {
-	modImplementation ("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	minecraft ("com.mojang:minecraft:${project.minecraft_version}")
-	mappings ("net.fabricmc:yarn:${project.yarn_mappings}:v2")
-	modImplementation ("net.fabricmc:fabric-loader:${project.loader_version}")
 
-	modImplementation ("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-	modImplementation ("carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}")
-	modImplementation ("com.github.Chocohead:Fabric-ASM:v2.0.1")
+	// Fabric
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	include ("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-	include ("carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}")
-	include ("com.github.Chocohead:Fabric-ASM:v2.0.1")
+	include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+
+	// Other Mods
+	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	modImplementation "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
+	modImplementation "com.misterpemodder:shulkerboxtooltip:${project.shulkerboxtooltip_version}+${project.minecraft_version}"
+
+	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	include "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
+
 }
 
 processResources {
