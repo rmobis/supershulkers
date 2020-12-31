@@ -161,22 +161,24 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	}
 
 	/**
-	 * We overwrite only so we can return our own customized ScreenHandler.
-	 *
-	 * TODO: convert this to a short circuit injector
-	 *
-	 * @author rmobis
+	 * Short circuit to return our own customized ScreenHandler.
 	 */
-	@Overwrite
-	public ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+	@Inject(
+		method = "createScreenHandler(ILnet/minecraft/entity/player/PlayerInventory;)Lnet/minecraft/screen/ScreenHandler;",
+		at = @At("HEAD"),
+		cancellable = true
+	)
+	public void provideCustomScreenHandler(int syncId, PlayerInventory playerInventory, CallbackInfoReturnable<ScreenHandler> ci) {
 		LOGGER.trace("hijacking createScreenHandler ({}, {})", syncId, playerInventory);
 
-		return EnlargeableShulkerBoxScreenHandler.createFromEnchantments(
+		ScreenHandler scHandler = EnlargeableShulkerBoxScreenHandler.createFromEnchantments(
 			syncId,
 			playerInventory,
 			(Inventory) this,
 			this.getEnchantments()
 		);
+
+		ci.setReturnValue(scHandler);
 	}
 
 }
