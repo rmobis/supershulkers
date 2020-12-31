@@ -14,6 +14,8 @@ import net.minecraft.util.registry.Registry;
 public class SuperShulkers implements ModInitializer {
 	private static final Logger LOGGER = LogManager.getLogger(SuperShulkers.class);
 
+	public static final String MODID = "supershulkers";
+
 	public static EnlargeEnchantment ENLARGE_ENCHANTMENT;
 	public static RestockEnchantment RESTOCK_ENCHANTMENT;
 	public static VacuumEnchantment VACUUM_ENCHANTMENT;
@@ -29,7 +31,7 @@ public class SuperShulkers implements ModInitializer {
 	private void registerEnchantments() {
 		SuperShulkers.ENLARGE_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
-			new Identifier("supershulkers", "enlarge"),
+			new Identifier(MODID, "enlarge"),
 			new EnlargeEnchantment()
 		);
 
@@ -37,7 +39,7 @@ public class SuperShulkers implements ModInitializer {
 
 		SuperShulkers.RESTOCK_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
-			new Identifier("supershulkers", "restock"),
+			new Identifier(MODID, "restock"),
 			new RestockEnchantment()
 		);
 
@@ -45,7 +47,7 @@ public class SuperShulkers implements ModInitializer {
 
 		SuperShulkers.VACUUM_ENCHANTMENT = Registry.register(
 			Registry.ENCHANTMENT,
-			new Identifier("supershulkers", "vacuum"),
+			new Identifier(MODID, "vacuum"),
 			new VacuumEnchantment()
 		);
 

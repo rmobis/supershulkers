@@ -23,7 +23,7 @@ public class SuperShulkersExtension implements CarpetExtension {
 
 
 	private void registerScarpetApp() {
-		this.superShulkersApp = BundledModule.fromPath("assets/supershulkers/scripts/", SuperShulkersExtension.SCARPET_APP, false);
+		this.superShulkersApp = BundledModule.fromPath("assets/" + SuperShulkers.MODID + "/scripts/", SCARPET_APP, false);
 		CarpetScriptServer.registerBuiltInScript(this.superShulkersApp);
 
 		LOGGER.info("Registered scarpet app {}", this.superShulkersApp);
