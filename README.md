@@ -5,4 +5,4 @@ This is just a mod to add a little flourish to @gnembom's shulkerboxes [script](
 ## Known Issues
 
 - using a grindstone to disenchant doesn't work
-- anvils don't work properly
+- anvils don't work properly (probably fixed)

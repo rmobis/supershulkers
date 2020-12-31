@@ -6,6 +6,7 @@
 	"mixins": [],
 	"client": [
 		"BlockItemMixin",
+		"EnchantmentHelperMixin",
 		"ItemStackMixin",
 		"ShulkerBoxBlockEntityMixin",
 		"ShulkerBoxBlockMixin"

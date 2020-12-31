@@ -9,12 +9,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,7 +30,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Mixin(ShulkerBoxBlock.class)
@@ -47,7 +45,7 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 	public abstract DyeColor getColor();
 
 
-	/**
+	/**prob
 	 * Modifies the dropped stack (usually a single shulker box item) to add back the enchantments. I believe this only
 	 * applies to survival.
 	 */
@@ -62,8 +60,10 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 			if (ShulkerUtil.isShulkerBox(stack.getItem())) {
 				BlockEntity blockEntity = builder.getNullable(LootContextParameters.BLOCK_ENTITY);
 
-				if (blockEntity instanceof ShulkerBoxBlockEntity) {
-					ShulkerUtil.rebuildStackEnchantments(stack, (CustomEnchantmentHolder) blockEntity);
+				if (blockEntity instanceof CustomEnchantmentHolder) {
+					CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) blockEntity;
+
+					EnchantmentHelper.set(enchHolder.getEnchantments(), stack);
 				}
 			}
 		}
@@ -77,18 +77,23 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 	@Inject(
 		method = "onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V",
 		at = @At(
-			value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;serializeInventory(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
 		),
 		locals = LocalCapture.CAPTURE_FAILHARD
 	)
-	public void rebuildEnchantmentsOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci, BlockEntity __, ShulkerBoxBlockEntity sbEntity, ItemStack stack, CompoundTag beTag) {
+	public void rebuildEnchantmentsOnBreak(
+		World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci,
+		BlockEntity __, ShulkerBoxBlockEntity ___, ItemStack stack // local captures
+	) {
 		LOGGER.trace("hijacking onBreak ({}, {}, {}, {})", world, pos, state, player);
 
-		CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) sbEntity;
-		Map<Enchantment, Integer> enchMap = enchHolder.getEnchantments();
-		ShulkerUtil.rebuildStackEnchantments(stack, enchMap);
-		beTag.put("Enchantments", enchHolder.getEnchantmentTag());
+		BlockEntity sbEntity = world.getBlockEntity(pos);
+		if (sbEntity instanceof CustomEnchantmentHolder) {
+			CustomEnchantmentHolder enchHolder = (CustomEnchantmentHolder) sbEntity;
+
+			EnchantmentHelper.set(enchHolder.getEnchantments(), stack);
+		}
 	}
 
 

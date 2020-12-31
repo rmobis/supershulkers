@@ -83,31 +83,4 @@ public abstract class ShulkerUtil {
 	public static int getEnlargeLevel(ListTag enchTag) {
 		return getEnlargeLevel(EnchantmentHelper.fromTag(enchTag));
 	}
-
-
-	/**
-	 * Reapplies all enchantments to the newly generated stack, probably after breaking the placed shulker box.
-	 */
-	public static void rebuildStackEnchantments(ItemStack stack, Map<Enchantment, Integer> enchMap) {
-		// we couldn't use EnchantmentHelper.set because it skips the usual addEnchantment method,
-		// which is what we have hooked for additional persistence.
-		// TODO: modify EnchantmentHelper.set because this apparently is used by other parts of minecraft (anvils)
-		for (Map.Entry<Enchantment, Integer> ench : enchMap.entrySet()) {
-			Enchantment enchRef = ench.getKey();
-			int enchLvl = ench.getValue();
-
-			stack.addEnchantment(enchRef, enchLvl);
-			LOGGER.info("Rebuilt enchantment {} (lvl {}) onto {}", enchRef, enchLvl, stack);
-		}
-	}
-
-
-	/**
-	 * Reapplies all enchantments to the newly generated stack, probably after breaking the placed shulker box.
-	 */
-	public static void rebuildStackEnchantments(ItemStack stack, CustomEnchantmentHolder sbEntity) {
-		Map<Enchantment, Integer> enchMap = sbEntity.getEnchantments();
-
-		rebuildStackEnchantments(stack, enchMap);
-	}
 }
