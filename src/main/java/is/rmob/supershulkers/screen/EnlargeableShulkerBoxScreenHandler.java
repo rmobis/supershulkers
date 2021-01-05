@@ -1,4 +1,4 @@
-package is.rmob.supershulkers.minecraft.screen;
+package is.rmob.supershulkers.screen;
 
 import is.rmob.supershulkers.SuperShulkers;
 import net.minecraft.enchantment.Enchantment;

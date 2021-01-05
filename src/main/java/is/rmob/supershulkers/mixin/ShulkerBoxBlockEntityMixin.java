@@ -2,7 +2,7 @@ package is.rmob.supershulkers.mixin;
 
 import is.rmob.supershulkers.ShulkerUtil;
 import is.rmob.supershulkers.duck.CustomEnchantmentHolder;
-import is.rmob.supershulkers.minecraft.screen.EnlargeableShulkerBoxScreenHandler;
+import is.rmob.supershulkers.screen.EnlargeableShulkerBoxScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.enchantment.Enchantment;
@@ -20,7 +20,6 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
