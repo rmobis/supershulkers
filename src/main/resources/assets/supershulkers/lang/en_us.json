@@ -1,5 +1,12 @@
 {
 	"enchantment.supershulkers.enlarge": "Enlarge",
+	"enchantment.supershulkers.enlarge.desc": "Increases number of slots in the shulker box.",
+
 	"enchantment.supershulkers.restock": "Restock",
-	"enchantment.supershulkers.vacuum": "Vacuum"
+	"enchantment.supershulkers.restock.desc": "Restocks consumed items from the shulker box",
+
+	"enchantment.supershulkers.vacuum": "Vacuum",
+	"enchantment.supershulkers.vacuum.desc": "Picks items directly into the shulker box.",
+
+	"enchantedtooltip.enchant.type.SHULKER_BOX": "Shulker Boxes"
 }
