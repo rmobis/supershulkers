@@ -5,9 +5,9 @@ import is.rmob.supershulkers.duck.EnchantmentPersistent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,13 +24,13 @@ public abstract class ItemStackMixin implements EnchantmentPersistent {
 	public abstract Item getItem();
 
 	@Shadow
-	public abstract CompoundTag getSubTag(String key);
+	public abstract NbtCompound getSubNbt(String key);
 
 	@Shadow
-	public abstract void putSubTag(String key, Tag tag);
+	public abstract void setSubNbt(String key, NbtElement tag);
 
 	@Shadow
-	public abstract ListTag getEnchantments();
+	public abstract NbtList getEnchantments();
 
 
 	/**
@@ -51,14 +51,14 @@ public abstract class ItemStackMixin implements EnchantmentPersistent {
 	 */
 	@Override
 	public void persistEnchantmentsIntoBET() {
-		CompoundTag beTag = getSubTag("BlockEntityTag");
+		NbtCompound beTag = getSubNbt("BlockEntityTag");
 
 		if (beTag == null) {
-			beTag = new CompoundTag();
+			beTag = new NbtCompound();
 		}
 
 		beTag.put("Enchantments", this.getEnchantments());
-		this.putSubTag("BlockEntityTag", beTag);
+		this.setSubNbt("BlockEntityTag", beTag);
 
 		LOGGER.debug("Persisted enchantment data {} into BET {}", this.getEnchantments(), beTag);
 	}

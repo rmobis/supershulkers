@@ -32,7 +32,7 @@ public class SuperShulkersCarpetExtension implements CarpetExtension {
 
 	@Override
 	public void onServerLoadedWorlds(MinecraftServer server) {
-		CarpetServer.scriptServer.addScriptHost(server.getCommandSource(), this.superShulkersApp.getName(), null, true, false, false);
+		CarpetServer.scriptServer.addScriptHost(server.getCommandSource(), this.superShulkersApp.getName(), null, true, false, false, null);
 
 		LOGGER.info("Loaded scarpet app {}", this.superShulkersApp);
 	}

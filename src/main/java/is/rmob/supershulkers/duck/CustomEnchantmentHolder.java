@@ -1,7 +1,7 @@
 package is.rmob.supershulkers.duck;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtList;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public interface CustomEnchantmentHolder {
 
 	public void setEnchantments(Map<Enchantment, Integer> enchMap);
 
-	public void setEnchantments(ListTag enchTag);
+	public void setEnchantments(NbtList enchNbt);
 
-	public ListTag getEnchantmentTag();
+	public NbtList getEnchantmentNbt();
 }

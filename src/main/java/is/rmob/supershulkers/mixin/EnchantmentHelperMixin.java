@@ -21,7 +21,7 @@ public abstract class EnchantmentHelperMixin {
 		method = "set(Ljava/util/Map;Lnet/minecraft/item/ItemStack;)V",
 		at = @At(
 			value = "INVOKE",
-			target ="Lnet/minecraft/item/ItemStack;putSubTag(Ljava/lang/String;Lnet/minecraft/nbt/Tag;)V",
+			target ="Lnet/minecraft/item/ItemStack;setSubNbt(Ljava/lang/String;Lnet/minecraft/nbt/NbtElement;)V",
 			shift = At.Shift.AFTER
 		)
 	)

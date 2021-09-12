@@ -10,11 +10,12 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
@@ -60,19 +61,19 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 
 
 	@Override
-	public void setEnchantments(ListTag enchTag) {
-		setEnchantments(EnchantmentHelper.fromTag(enchTag));
+	public void setEnchantments(NbtList enchNbt) {
+		setEnchantments(EnchantmentHelper.fromNbt(enchNbt));
 	}
 
 	/**
 	 * Rebuild enchantment NBT from enchantment map.
 	 */
 	@Override
-	public ListTag getEnchantmentTag() {
-		ListTag enchantmentTag = new ListTag();
+	public NbtList getEnchantmentNbt() {
+		NbtList enchantmentTag = new NbtList();
 
 		for (Map.Entry<Enchantment, Integer> ench : this.enchantmentMap.entrySet()) {
-			CompoundTag enchTag = new CompoundTag();
+			NbtCompound enchTag = new NbtCompound();
 
 			Enchantment enchRef = ench.getKey();
 			short enchLvl = (short) ((byte) ((int) ench.getValue()));
@@ -109,11 +110,11 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	 * Recovers enchantment map from BET.
 	 */
 	@Inject(
-		method = "fromTag(Lnet/minecraft/block/BlockState;Lnet/minecraft/nbt/CompoundTag;)V",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;deserializeInventory(Lnet/minecraft/nbt/CompoundTag;)V")
+		method = "readNbt(Lnet/minecraft/nbt/NbtCompound;)V",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/ShulkerBoxBlockEntity;readInventoryNbt(Lnet/minecraft/nbt/NbtCompound;)V")
 	)
-	public void recoverEnchantmentsFromTag(BlockState state, CompoundTag tag, CallbackInfo ci) {
-		LOGGER.trace("hijacking fromTag ({}, {})", state, tag);
+	public void recoverEnchantmentsFromTag(NbtCompound tag, CallbackInfo ci) {
+		LOGGER.trace("hijacking readNbt ({})", tag);
 
 		if (tag.contains("Enchantments", 9)) {
 			setEnchantments(tag.getList("Enchantments", 10));
@@ -126,12 +127,12 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	/**
 	 * Output enchantment data to BET.
 	 */
-	@Inject(method = "toTag(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"))
-	public void putEnchantsIntoTag(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
-		LOGGER.trace("hijacking toTag ({})", tag);
+	@Inject(method = "writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;", at = @At("RETURN"))
+	public void putEnchantsIntoTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
+		LOGGER.trace("hijacking writeNbt ({})", tag);
 
 		if (!this.getEnchantments().isEmpty()) {
-			tag.put("Enchantments", this.getEnchantmentTag());
+			tag.put("Enchantments", this.getEnchantmentNbt());
 
 			LOGGER.info("Output enchantment data {} into BET", tag.get("Enchantments"));
 		}
@@ -155,8 +156,8 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	/**
 	 * Recreates the inventory list with the appropriate number of elements.
 	 */
-	@Inject(method = "<init>(Lnet/minecraft/util/DyeColor;)V", at = @At("TAIL"))
-	public void onConstructRecreateInventory(DyeColor dye, CallbackInfo ci) {
+	@Inject(method = "<init>(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V", at = @At("TAIL"))
+	public void onConstructRecreateInventory(DyeColor dye, BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
 		LOGGER.trace("hijacking ShulkerBoxEntity#constructor ({})", dye);
 
 		int invSize = ShulkerUtil.getInventorySize(this.getEnchantments());

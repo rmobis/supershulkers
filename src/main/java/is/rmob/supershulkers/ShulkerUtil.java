@@ -8,7 +8,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,8 +55,8 @@ public abstract class ShulkerUtil {
 	}
 
 
-	public static int getInventorySize(ListTag enchTag) {
-		return getInventorySize(EnchantmentHelper.fromTag(enchTag));
+	public static int getInventorySize(NbtList enchTag) {
+		return getInventorySize(EnchantmentHelper.fromNbt(enchTag));
 	}
 
 
@@ -70,8 +70,8 @@ public abstract class ShulkerUtil {
 	}
 
 
-	public static int getRowCount(ListTag enchTag) {
-		return getRowCount(EnchantmentHelper.fromTag(enchTag));
+	public static int getRowCount(NbtList enchTag) {
+		return getRowCount(EnchantmentHelper.fromNbt(enchTag));
 	}
 
 
@@ -80,7 +80,7 @@ public abstract class ShulkerUtil {
 	}
 
 
-	public static int getEnlargeLevel(ListTag enchTag) {
-		return getEnlargeLevel(EnchantmentHelper.fromTag(enchTag));
+	public static int getEnlargeLevel(NbtList enchTag) {
+		return getEnlargeLevel(EnchantmentHelper.fromNbt(enchTag));
 	}
 }
