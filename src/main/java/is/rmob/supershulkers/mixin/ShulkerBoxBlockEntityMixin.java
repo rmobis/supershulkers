@@ -128,7 +128,7 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	 * Output enchantment data to BET.
 	 */
 	@Inject(method = "Lnet/minecraft/block/entity/BlockEntity;writeNbt(Lnet/minecraft/nbt/NbtCompound;)V", at = @At("RETURN"))
-	public void putEnchantsIntoTag(NbtCompound tag, CallbackInfo<NbtCompound> cir) {
+	public void putEnchantsIntoTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
 		LOGGER.trace("hijacking writeNbt ({})", tag);
 
 		if (!this.getEnchantments().isEmpty()) {
@@ -175,7 +175,7 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 		at = @At("HEAD"),
 		cancellable = true
 	)
-	public void provideCustomScreenHandler(int syncId, PlayerInventory playerInventory, CallbackInfo<ScreenHandler> ci) {
+	public void provideCustomScreenHandler(int syncId, PlayerInventory playerInventory, CallbackInfoReturnable<ScreenHandler> ci) {
 		LOGGER.trace("hijacking createScreenHandler ({}, {})", syncId, playerInventory);
 
 		ScreenHandler scHandler = EnlargeableShulkerBoxScreenHandler.createFromEnchantments(
