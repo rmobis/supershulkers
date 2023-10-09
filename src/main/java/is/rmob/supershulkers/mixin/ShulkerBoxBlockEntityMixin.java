@@ -128,7 +128,7 @@ public abstract class ShulkerBoxBlockEntityMixin implements CustomEnchantmentHol
 	 * Output enchantment data to BET.
 	 */
 	@Inject(method = "Lnet/minecraft/block/entity/BlockEntity;writeNbt(Lnet/minecraft/nbt/NbtCompound;)V", at = @At("RETURN"))
-	public void putEnchantsIntoTag(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
+	public void putEnchantsIntoTag(NbtCompound tag, CallbackInfo<NbtCompound> cir) {
 		LOGGER.trace("hijacking writeNbt ({})", tag);
 
 		if (!this.getEnchantments().isEmpty()) {
