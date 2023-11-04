@@ -29,6 +29,8 @@
 		"supershulkers.mixins.json"
 	],
 
+	"accessWidener" : "EnchantmentTarget.accesswidener",
+
 	"depends": {
 		"fabricloader": ">=0.14.22",
 		"fabric": "*",
