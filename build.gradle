@@ -100,5 +100,5 @@ publishing {
 }
 
 loom {
-	accessWidener = file("src/main/resources/EnchantmentTarger.accesswidener")
+	accessWidener = file("src/main/resources/EnchantmentTarget.accesswidener")
 }
