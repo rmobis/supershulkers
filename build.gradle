@@ -46,6 +46,10 @@ dependencies {
 
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/supershulkers.accesswidener")
+}
+
 processResources {
 	inputs.property "version", project.version
 
@@ -99,6 +103,4 @@ publishing {
 	}
 }
 
-loom {
-	accessWidener = file("src/main/resources/EnchantmentTarget.accesswidener")
-}
+
